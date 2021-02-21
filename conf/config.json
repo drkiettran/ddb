@@ -1,0 +1,29 @@
+{
+	"http.port": 9999,
+
+	"ddb_queue": {
+		"host_name": "localhost",
+		"port_no": 5672,
+		"user_name": "user",
+		"password": "secret",
+		"type": "queue",
+		"queue_name": "ddb-queue"
+	},
+	"dsb_queue": {
+		"host_name": "localhost",
+		"port_no": 5672,
+		"user_name": "user",
+		"password": "secret",
+		"type": "queue",
+		"queue_name": "dsb-queue"
+	},
+	"routes": [
+		{
+			"source_endpoint": "ddb_queue",
+			"destination_endpoint": "dsb_queue",
+			"payload_type": "text",
+			"compressed": "no",
+			"encrypted": "no"
+		}
+	]
+}
