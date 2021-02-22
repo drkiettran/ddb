@@ -1,4 +1,6 @@
-= Starter
+= DDB
+
+Databus
 
 image:https://img.shields.io/badge/vert.x-4.0.2-purple.svg[link="https://vertx.io"]
 
@@ -19,6 +21,11 @@ To package your application:
 To run your application:
 ```
 ./mvnw clean compile exec:java
+```
+
+To run as a standalone:
+```
+java -jar target/ddb-1.0.0-SNAPSHOT-fat.jar -conf conf/config.json
 ```
 
 == Help
