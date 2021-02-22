@@ -1,4 +1,4 @@
-package com.example.starter;
+package gov.dhs.cisa.ctm;
 
 import org.junit.jupiter.api.Test;
 

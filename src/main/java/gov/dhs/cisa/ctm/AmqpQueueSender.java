@@ -1,4 +1,4 @@
-package com.example.starter;
+package gov.dhs.cisa.ctm;
 
 import io.vertx.amqp.AmqpClient;
 import io.vertx.amqp.AmqpClientOptions;
