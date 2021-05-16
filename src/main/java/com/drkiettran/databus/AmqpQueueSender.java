@@ -1,4 +1,4 @@
-package gov.dhs.cisa.ctm;
+package com.drkiettran.databus;
 
 import io.vertx.amqp.AmqpClient;
 import io.vertx.amqp.AmqpClientOptions;
@@ -34,6 +34,7 @@ public class AmqpQueueSender {
 
 			client.connect(ar -> {
 				if (ar.failed()) {
+					Logger.error(ar.cause());
 					Logger.info("*** Unable to connect to the broker");
 				} else {
 					Logger.info("*** Connection for sender created");

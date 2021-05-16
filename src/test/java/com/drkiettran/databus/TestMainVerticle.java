@@ -1,4 +1,4 @@
-package gov.dhs.cisa.ctm;
+package com.drkiettran.databus;
 
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import gov.dhs.cisa.ctm.MainVerticle;
+import com.drkiettran.databus.MainVerticle;
 
 @ExtendWith(VertxExtension.class)
 public class TestMainVerticle {
