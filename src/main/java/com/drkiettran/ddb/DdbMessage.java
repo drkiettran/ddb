@@ -1,4 +1,4 @@
-package com.drkiettran.databus;
+package com.drkiettran.ddb;
 
 import io.vertx.amqp.AmqpMessage;
 import io.vertx.amqp.AmqpMessageBuilder;

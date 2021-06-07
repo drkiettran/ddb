@@ -1,26 +1,39 @@
 {
+	"http.hostname": "0.0.0.0",
 	"http.port": 9999,
+	"tls": true,
+	"tls_mutual": true,
+	"keystore": "/home/student/certs/localhost.jks",
+	"keystore_password": "changeit",
+	"truststore": "/home/student/certs/localhost.jks",
+	"truststore_password": "changeit",
 
-	"ddb_queue": {
-		"host_name": "localhost",
-		"port_no": 5672,
-		"user_name": "user",
-		"password": "secret",
+	"in_queue": {
+		"host_name": "172.17.0.8",
+		"port_no": 5671,
+		"user_name": "admin",
+		"password": "admin",
 		"type": "queue",
-		"queue_name": "ddb-queue"
+		"queue_name": "in-queue",
+		"tls": true,
+		"tls_cert": "/home/student/certs/client-cert.pem",
+		"tls_key": "/home/student/certs/client-priv-key.pem"
 	},
-	"dsb_queue": {
-		"host_name": "localhost",
-		"port_no": 5672,
-		"user_name": "user",
-		"password": "secret",
+	"out_queue": {
+		"host_name": "172.17.0.8",
+		"port_no": 5671,
+		"user_name": "admin",
+		"password": "admin",
 		"type": "queue",
-		"queue_name": "dsb-queue"
+		"queue_name": "out-queue",
+		"tls": true,
+		"tls_cert": "/home/student/certs/client-cert.pem",
+		"tls_key": "/home/student/certs/client-priv-key.pem"
 	},
 	"routes": [
 		{
-			"source_endpoint": "ddb_queue",
-			"destination_endpoint": "dsb_queue",
+			"source_endpoint": "in_queue",
+			"destination_endpoint": "out_queue",
 			"payload_type": "text",
 			"compressed": "no",
 			"encrypted": "no"

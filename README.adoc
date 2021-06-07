@@ -1,6 +1,6 @@
 = DDB
 
-Databus
+Distributed Data Bus
 
 image:https://img.shields.io/badge/vert.x-4.0.2-purple.svg[link="https://vertx.io"]
 

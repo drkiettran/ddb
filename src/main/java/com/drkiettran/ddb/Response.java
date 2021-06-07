@@ -1,4 +1,4 @@
-package com.drkiettran.databus;
+package com.drkiettran.ddb;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;

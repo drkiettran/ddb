@@ -1,4 +1,4 @@
-package com.drkiettran.databus;
+package com.drkiettran.ddb;
 
 import java.util.HashMap;
 

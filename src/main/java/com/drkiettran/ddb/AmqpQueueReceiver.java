@@ -1,4 +1,4 @@
-package com.drkiettran.databus;
+package com.drkiettran.ddb;
 
 import io.vertx.amqp.AmqpClient;
 import io.vertx.amqp.AmqpClientOptions;
@@ -8,19 +8,23 @@ import io.vertx.amqp.AmqpReceiver;
 import io.vertx.config.ConfigRetriever;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.net.PemKeyCertOptions;
 
 public class AmqpQueueReceiver {
 	final static Logger Logger = LoggerFactory.getLogger(AmqpQueueReceiver.class);
 	private AmqpClient client;
 	private AmqpConnection connection;
 	private AmqpReceiver receiver;
+	private Vertx vertx;
+	private String key;
 
-	public AmqpQueueReceiver(String key) {
-		Vertx vertx = Vertx.vertx();
-
+	public AmqpQueueReceiver(Vertx vertx, String key) {
+		this.key = key;
+		this.vertx = vertx;
 		ConfigRetriever retriever = ConfigRetriever.create(vertx);
 		retriever.getConfig(json -> {
 			JsonObject config = json.result();
@@ -34,8 +38,16 @@ public class AmqpQueueReceiver {
 		Logger.info("*** Connecting ....");
 		AmqpClientOptions options = new AmqpClientOptions().setHost(cfg.getHostName()).setPort(cfg.getPortNo())
 				.setUsername(cfg.getUserName()).setPassword(cfg.getPassword());
+		Logger.info(cfg);
 
-		client = AmqpClient.create(options);
+		if (cfg.getTls()) {
+			options.setSsl(true).setHostnameVerificationAlgorithm("").setTrustAll(true);
+			Buffer key = vertx.fileSystem().readFileBlocking(cfg.getTlsKey());
+			Buffer cert = vertx.fileSystem().readFileBlocking(cfg.getTlsCert());
+			options.setPemKeyCertOptions(new PemKeyCertOptions().setKeyValue(key).setCertValue(cert));
+		}
+
+		client = AmqpClient.create(vertx, options);
 
 		client.connect(ar -> {
 			if (ar.failed()) {
@@ -56,6 +68,7 @@ public class AmqpQueueReceiver {
 			} else {
 				receiver = done.result();
 				receiver.handler(msg -> {
+					Logger.info(msg);
 					processMsg(msg, cfg);
 				});
 			}
@@ -64,14 +77,14 @@ public class AmqpQueueReceiver {
 	}
 
 	private void processMsg(AmqpMessage msg, EndpointConfig cfg) {
-		Vertx vertx = Vertx.vertx();
-
 		ConfigRetriever retriever = ConfigRetriever.create(vertx);
 		retriever.getConfig(json -> {
 			JsonObject result = json.result();
 			RouteConfig.Route route = new RouteConfig(result.getJsonArray("routes")).getRoute(cfg.getKey());
 			if (route != null) {
-				new AmqpQueueSender(route.getDestination(), msg.bodyAsString());
+				Logger.info("*** receiving >>> " + msg.bodyAsString() + " <<<");
+				Logger.info("*** from      >>> " + key + " <<<");
+				new AmqpQueueSender(vertx, route.getDestination(), msg.bodyAsString());
 			} else {
 				Logger.info("No route!");
 			}
